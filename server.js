@@ -4,20 +4,25 @@ var bodyParser = require("body-parser");
 var methodOverride = require('method-override');
 var mysql = require('mysql');
 var path = require('path');
-
-var burgers_controller = require('./controllers/burgers_controller.js');
+var db = require('./models');
 
 var app = express();
 var PORT = (process.env.PORT || 3000);
 
 app.use(express.static(__dirname + "/public"));
-app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-burgers_controller(app);
+require('./routes/api-routes.js')(app);
 
-app.listen(PORT, function() {
-    console.log('Listening to PORT ' + PORT);
+db.sequelize.sync({ force: false }).then(function() {
+    app.listen(PORT, function() {
+        console.log('Listening to PORT ' + PORT);
+    });
 });
