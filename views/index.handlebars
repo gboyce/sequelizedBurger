@@ -1,0 +1,51 @@
+
+<div class='container'>
+    <div class='jumbotron'>
+        <h1 class='text-center'>EAT A BURGER</h1>
+    </div>
+    <div class='form-group'>
+        <label for='name_burger'>Burger:</label>
+        <textarea class='form-control' row='4' cols='50' id='name_burger'></textarea>
+        <br>
+        <button type='submit' class='btn btn-primary btn-md' id='submit_burger'>Add Burger</button>
+    <div>
+</div>
+
+<div class='row'>
+    <div class='col-sm-4 col-sm-offset-2' id='ready_to_eat'>
+        <h1>Ready to Eat</h1>
+        {{#each burg}}
+            <span><h1>{{this.burger_name}}</h1>
+            <button class='burger_btn' id={{burger_name}}>Devour</button></span>
+        {{/each}}
+    </div>
+    <div class='col-sm-4' id='in_the_belly'>
+        <h1>In mah Belly</h1>
+        {{#each eaten_burg}}
+            <span><h1>{{this.burger_name}}</h1>
+        {{/each}}
+    </div>
+</div>
+
+<script>
+    $('#submit_burger').on('click', function() {
+        event.preventDefault();
+
+        var burger_name = {
+            burger_name: $('#name_burger').val()
+        };     
+
+        $.post('/api/add', burger_name, function(data) {
+           
+        });  
+        window.location.reload();   
+    });
+
+    $('.burger_btn').on('click', function() {
+        var burger_id = $(this).attr('id');   
+        $.post('/api/update', {burger_name: burger_id}, function(data) {
+        }); 
+        window.location.reload(); 
+    });
+
+</script>
