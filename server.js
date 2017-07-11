@@ -21,8 +21,16 @@ app.set("view engine", "handlebars");
 
 require('./routes/api-routes.js')(app);
 
-db.sequelize.sync({ force: false }).then(function() {
-    app.listen(PORT, function() {
-        console.log('Listening to PORT ' + PORT);
-    });
+models.sequelize.sync({ force: true }).then(function() {
+
+    console.log('Nice! Database looks fine')
+
+}).catch(function(err) {
+
+    console.log(err, "Something went wrong with the Database Update!")
+
 });
+app.listen(PORT, function() {
+    console.log('Listening to PORT ' + PORT);
+});
+
