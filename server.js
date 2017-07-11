@@ -21,15 +21,17 @@ app.set("view engine", "handlebars");
 
 require('./routes/api-routes.js')(app);
 
-models.sequelize.sync({ force: true }).then(function() {
+if (process.env.JAWSDB_URL) {
+    connection = mysql.createConnection(process.env.JAWSDB_URL);
+} else {
+    connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'hamburger_db'
+    });
+};
 
-    console.log('Nice! Database looks fine')
-
-}).catch(function(err) {
-
-    console.log(err, "Something went wrong with the Database Update!")
-
-});
 app.listen(PORT, function() {
     console.log('Listening to PORT ' + PORT);
 });
